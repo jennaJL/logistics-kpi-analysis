@@ -2,3 +2,4 @@ logistics.db
 *.csv.gz
 DataCoSupplyChainDataset.csv
 __pycache__/
+.DS_Store
