@@ -1,0 +1,5 @@
+delivery_status,late_flag,orders,result
+Advance shipping,0,15124,consistent
+Late delivery,1,36043,consistent
+Shipping canceled,0,2855,consistent
+Shipping on time,0,11719,consistent

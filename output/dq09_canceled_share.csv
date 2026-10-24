@@ -1,0 +1,5 @@
+delivery_status,orders,pct_of_orders
+Late delivery,36043,54.8
+Advance shipping,15124,23.0
+Shipping on time,11719,17.8
+Shipping canceled,2855,4.3

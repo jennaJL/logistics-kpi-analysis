@@ -1,0 +1,21 @@
+order_region,market,orders,late_pct,late_rank
+Central Africa,Africa,533,60.0,1
+East Africa,Africa,589,59.1,2
+South of  USA ,USCA,1280,58.8,3
+West Asia,Pacific Asia,1935,58.5,4
+Western Europe,Europe,9561,58.4,5
+Eastern Europe,Europe,1246,58.0,6
+South Asia,Pacific Asia,3218,58.0,6
+Southeast Asia,Pacific Asia,4169,58.0,6
+US Center ,USCA,1852,57.8,9
+East of USA,USCA,2219,57.5,10
+Central America,LATAM,9001,57.3,11
+Eastern Asia,Pacific Asia,3170,57.3,11
+West of USA ,USCA,2536,57.2,13
+North Africa,Africa,1013,57.1,14
+Oceania,Pacific Asia,4175,57.1,14
+South America,LATAM,4738,56.9,16
+Northern Europe,Europe,3562,56.0,17
+Southern Europe,Europe,3389,55.9,18
+Caribbean,LATAM,2675,55.6,19
+West Africa,Africa,1174,53.3,20

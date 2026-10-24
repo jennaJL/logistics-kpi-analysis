@@ -1,0 +1,14 @@
+shipping_mode,delay_days,orders,pct_within_mode
+First Class,1,9600,100.0
+Same Day,0,1759,51.6
+Same Day,1,1648,48.4
+Second Class,0,2452,20.0
+Second Class,1,2422,19.8
+Second Class,2,2472,20.2
+Second Class,3,2452,20.0
+Second Class,4,2456,20.0
+Standard Class,-2,7608,20.2
+Standard Class,-1,7516,20.0
+Standard Class,0,7508,20.0
+Standard Class,1,7456,19.8
+Standard Class,2,7537,20.0

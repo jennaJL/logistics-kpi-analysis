@@ -1,0 +1,4 @@
+logistics.db
+*.csv.gz
+DataCoSupplyChainDataset.csv
+__pycache__/
