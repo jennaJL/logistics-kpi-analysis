@@ -3,3 +3,4 @@ logistics.db
 DataCoSupplyChainDataset.csv
 __pycache__/
 .DS_Store
+data/
