@@ -1,0 +1,8 @@
+rule,violations,checked
+approved before purchase,0,99281
+handed to carrier before purchase,166,97658
+handed to carrier before approval,1359,97644
+delivered before purchase,0,96476
+delivered before approval,61,96462
+delivered before handed to carrier,23,96475
+promised date before purchase,0,99441

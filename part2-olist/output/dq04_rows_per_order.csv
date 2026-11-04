@@ -1,0 +1,5 @@
+child_table,orders_with_rows,orders_with_several,max_per_order
+items,98666,9803,21
+distinct sellers,98666,1278,5
+payments,99440,2961,29
+reviews,98673,547,3

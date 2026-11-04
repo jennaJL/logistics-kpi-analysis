@@ -1,0 +1,5 @@
+joined_tables,row_count,sum_of_price,inflation_pct
+items only,112650,13591643.7,0.0
+items + payments,117601,14209115.34,4.54
+items + reviews,112372,13527224.77,-0.47
+items + payments + reviews,117329,14141001.32,4.04

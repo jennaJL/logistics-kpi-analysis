@@ -1,0 +1,16 @@
+link,row_count,unmatched,unmatched_pct
+orders -> customers,99441,0,0.0
+customers -> orders,99441,0,0.0
+items -> orders,112650,0,0.0
+items -> products,112650,0,0.0
+items -> sellers,112650,0,0.0
+payments -> orders,103886,0,0.0
+reviews -> orders,99224,0,0.0
+orders -> items,99441,775,0.78
+orders -> payments,99441,1,0.0
+orders -> reviews,99441,768,0.77
+delivered orders -> items,96478,0,0.0
+delivered orders -> reviews,96478,646,0.67
+customers -> geolocation (zip),99441,278,0.28
+sellers -> geolocation (zip),3095,7,0.23
+products -> category translation,32951,13,0.04

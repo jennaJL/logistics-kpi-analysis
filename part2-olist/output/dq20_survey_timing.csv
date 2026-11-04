@@ -1,0 +1,7 @@
+measure,days,reviews
+all delivered: survey minus delivery,1,85641
+all delivered: survey minus delivery,0,3193
+all delivered: survey minus delivery,2,981
+"late, survey before delivery: survey minus promised date",2,3386
+"late, survey before delivery: survey minus promised date",3,571
+"late, survey before delivery: survey minus promised date",1,238

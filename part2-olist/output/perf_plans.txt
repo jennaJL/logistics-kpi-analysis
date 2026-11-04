@@ -1,0 +1,51 @@
+SQLite 3.37.2
+Drilldown seller: 6560211a19b47992c3666cc44a7e94c0
+Index build: 296 ms. Database size: 135.8 MB before, 157.7 MB with indexes.
+
+seller_kpi, before indexes
+  MATERIALIZE order_sellers
+  SCAN raw_order_items
+  USE TEMP B-TREE FOR DISTINCT
+  MATERIALIZE latest_review
+  CO-ROUTINE SUBQUERY 3
+  CO-ROUTINE SUBQUERY 6
+  SCAN raw_reviews
+  USE TEMP B-TREE FOR ORDER BY
+  SCAN SUBQUERY 6
+  SCAN SUBQUERY 3
+  SCAN raw_orders
+  SEARCH s USING AUTOMATIC COVERING INDEX (order_id=?)
+  SEARCH r USING AUTOMATIC COVERING INDEX (order_id=?)
+  USE TEMP B-TREE FOR GROUP BY
+  USE TEMP B-TREE FOR ORDER BY
+
+seller_drilldown, before indexes
+  SCAN i
+  SEARCH o USING AUTOMATIC COVERING INDEX (order_id=?)
+  USE TEMP B-TREE FOR GROUP BY
+  CORRELATED SCALAR SUBQUERY 1
+  SCAN r
+  USE TEMP B-TREE FOR ORDER BY
+
+seller_kpi, after indexes
+  MATERIALIZE order_sellers
+  SCAN raw_order_items USING COVERING INDEX idx_items_seller_order
+  MATERIALIZE latest_review
+  CO-ROUTINE SUBQUERY 3
+  CO-ROUTINE SUBQUERY 6
+  SCAN raw_reviews USING INDEX idx_reviews_order_answer
+  USE TEMP B-TREE FOR RIGHT PART OF ORDER BY
+  SCAN SUBQUERY 6
+  SCAN SUBQUERY 3
+  SCAN raw_orders
+  SEARCH s USING AUTOMATIC COVERING INDEX (order_id=?)
+  SEARCH r USING AUTOMATIC COVERING INDEX (order_id=?)
+  USE TEMP B-TREE FOR GROUP BY
+  USE TEMP B-TREE FOR ORDER BY
+
+seller_drilldown, after indexes
+  SEARCH i USING INDEX idx_items_seller_order (seller_id=?)
+  SEARCH o USING INDEX idx_orders_order (order_id=?)
+  CORRELATED SCALAR SUBQUERY 1
+  SEARCH r USING INDEX idx_reviews_order_answer (order_id=?)
+  USE TEMP B-TREE FOR RIGHT PART OF ORDER BY

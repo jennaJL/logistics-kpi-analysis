@@ -1,0 +1,13 @@
+tbl,expected_key,row_count,distinct_keys,extra_rows
+raw_orders,order_id,99441,99441,0
+raw_customers,customer_id,99441,99441,0
+raw_customers,customer_unique_id,99441,96096,3345
+raw_order_items,order_id + order_item_id,112650,112650,0
+raw_payments,order_id + payment_sequential,103886,103886,0
+raw_reviews,review_id,99224,98410,814
+raw_reviews,order_id,99224,98673,551
+raw_reviews,review_id + order_id,99224,99224,0
+raw_products,product_id,32951,32951,0
+raw_sellers,seller_id,3095,3095,0
+raw_geolocation,geolocation_zip_code_prefix,1000163,19015,981148
+raw_category_translation,product_category_name,71,71,0

@@ -1,0 +1,9 @@
+item,n
+item price <= 0,0
+freight < 0,0
+freight = 0,383
+freight above item price,4124
+payment value = 0,9
+payment value < 0,0
+payment type not_defined,3
+installments = 0,2

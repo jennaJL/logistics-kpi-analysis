@@ -1,0 +1,5 @@
+item,n
+orders with 2+ reviews,547
+"of those, with different scores",202
+review_ids used on 2+ orders,789
+orders touched by a shared review_id,1412

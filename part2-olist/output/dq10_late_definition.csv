@@ -1,0 +1,2 @@
+delivered_orders_with_dates,promised_dates_with_a_time,late_by_timestamp,late_by_calendar_day,delivered_on_promised_day,late_pct_timestamp,late_pct_calendar_day
+96470,0,7826,6534,1292,8.11,6.77

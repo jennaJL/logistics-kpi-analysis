@@ -1,0 +1,9 @@
+order_status,orders,past_promise,orders_with_review,avg_score
+shipped,1107,1107,1032,2.0
+canceled,619,614,599,1.8
+unavailable,609,609,595,1.53
+invoiced,314,314,309,1.64
+processing,301,301,295,1.27
+delivered,8,8,8,4.5
+created,5,5,3,2.33
+approved,2,2,2,2.5
