@@ -12,7 +12,7 @@ The raw files are not stored in this repo.
 
 ## Status
 
-Step 1 of the analysis is done: the data is loaded and checked. The clean tables and the analysis of late delivery come next.
+The data is loaded and checked, and the clean tables are built. The analysis of late delivery comes next.
 
 ## Data quality
 
@@ -44,6 +44,29 @@ Three indexes were tested: `raw_order_items(seller_id, order_id)`, `raw_orders(o
 
 Timings come from one machine (SQLite 3.37.2 in a Linux virtual machine on a MacBook Air) and will vary. The full plans are in `output/perf_plans.txt`.
 
+## Clean tables
+
+`build_tables.py` builds a clean layer on top of the raw tables, which stay unchanged:
+
+- **`stg_*`:** one table per raw table, with clean names and types.
+- **`fct_orders`:** one row per order, with promised days, actual days, days late, freight and review score. Each source is reduced to one row per order before joining, which avoids the 4.5% inflation above.
+- **`dim_sellers`, `dim_customers`, `dim_products`:** one row per seller, person and product.
+
+Every column and metric is defined in [`DATA_DICTIONARY.md`](DATA_DICTIONARY.md).
+
+| Population | Orders |
+|---|---|
+| All orders | 99,441 |
+| Delivered, with a delivery date | 96,470 |
+| Purchased January 2017 to August 2018: **late analysis** | 96,203 |
+| With a review: **score analysis** | 95,560 |
+
+In the late analysis, 6,531 orders are late (6.79%). 1,097 more in the same period were marked shipped and never delivered, and are reported separately.
+
+**Reconciliation:** 51 automated checks compare the new tables with the raw data, including row counts, price, freight and payment totals, and the rule that each kept review is the order's latest. Results are in `output/rc01_reconciliation.csv`. If a key is not unique or a check fails, the build stops and saves nothing.
+
+**One new finding for the analysis:** orders with more items or sellers score lower even when on time (4.36 with one seller and one item, 2.87 with 2+ sellers). Item and seller counts are now planned regression controls (issue 26 in the log).
+
 ## How to run
 
 Python 3 is all you need. The 9 CSVs go in a folder outside the repo.
@@ -52,6 +75,7 @@ Python 3 is all you need. The 9 CSVs go in a folder outside the repo.
 cd part2-olist
 python3 load_data.py path/to/csv/folder    # creates data/olist.db (git-ignored)
 python3 run_checks.py                      # writes output/dq*.csv
+python3 build_tables.py                    # adds the clean tables, writes output/rc*.csv
 python3 measure_performance.py             # writes output/perf_*
 ```
 
@@ -60,9 +84,14 @@ python3 measure_performance.py             # writes output/perf_*
 ```
 load_data.py                   CSV -> SQLite, unchanged, all columns as text
 run_checks.py                  runs the checks and saves the results
+build_tables.py                builds the clean tables and checks them against raw
 measure_performance.py         times the queries with and without indexes
 sql/01_data_quality.sql        data-quality checks
 sql/02_performance_queries.sql the two queries that were timed
+sql/03_staging.sql             staging tables
+sql/04_analysis_tables.sql     order, seller, customer and product tables
+sql/05_reconciliation.sql      checks against the raw data
+DATA_DICTIONARY.md             every table, column and metric definition
 ISSUES_LOG.md                  every problem found and how it is handled
 output/                        results of the checks and timings
 ```

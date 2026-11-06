@@ -1,5 +1,5 @@
 -- Two KPI queries used to measure the effect of indexes (see measure_performance.py).
--- They run on the raw tables. The clean analysis tables come in the next step.
+-- They run on the raw tables, as they were written before the clean tables existed.
 
 -- name: seller_kpi
 -- Late rate and average score for every seller with at least 100 delivered orders.

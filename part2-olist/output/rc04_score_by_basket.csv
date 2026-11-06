@@ -1,0 +1,4 @@
+basket,orders,late_orders,late_pct,avg_promised_days,avg_actual_days,avg_score,avg_score_on_time
+"one seller, one item",86598,6022,6.95,24.2,12.6,4.21,4.36
+"one seller, 2+ items",8333,496,5.95,24.5,12.1,3.75,3.85
+2+ sellers,1272,13,1.02,26.0,9.1,2.86,2.87

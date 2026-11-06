@@ -1,0 +1,5 @@
+delivery,answered,orders,avg_score
+on time,on or after delivery day,89031,4.29
+on time,before delivery,151,3.85
+late,on or after delivery day,2294,3.41
+late,before delivery,4084,1.63

@@ -1,6 +1,6 @@
 # Data issues log
 
-Each row is a problem found in the raw Olist data, and how the next step handles it. The raw tables are not changed. The evidence is in `output/`, under the check named in brackets.
+Each row is a problem found in the raw Olist data, and how it is handled. The raw tables are not changed: `build_tables.py` applies the handling when it builds the clean tables. The evidence is in `output/`, under the check named in brackets.
 
 ## Issues that affect the main question
 
@@ -16,6 +16,7 @@ Each row is a problem found in the raw Olist data, and how the next step handles
 | 8 | **Thin months at each end of the data.** | Sept to Dec 2016 has 329 orders and no orders in Nov. Sept and Oct 2018 have 20 orders and none delivered. (dq09) | Use orders purchased from January 2017 to August 2018. |
 | 9 | **Late orders are more likely to have no review.** | 2.34% of late orders have no review, against 0.55% of on-time orders. (dq24) | Exclude from score analysis and state the gap as a limitation. It is small and unlikely to change the conclusion, but it is not random. |
 | 10 | **Orders with more than one seller.** Delivery dates and reviews belong to the order, not to each seller. | 1,278 orders have 2+ sellers, about 1.3%. (dq04) | Rank sellers on single-seller orders only. |
+| 26 | **Orders with more items or sellers score lower, even when on time.** The order has only one delivery date, so a multi-seller order may look on time when only part of it has arrived. That reason is an inference and the data cannot confirm it. | On-time orders average 4.36 with one seller and one item, 3.85 with one seller and 2+ items, and 2.87 with 2+ sellers. Late rate is 6.95%, 5.95% and 1.02%. (rc04) | Add item count and seller count as regression controls, and repeat the main result on single-seller, single-item orders. |
 
 ## Issues with a smaller or limited effect
 

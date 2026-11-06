@@ -1,0 +1,10 @@
+step,filter,orders
+1,All orders,99441
+2,"Status delivered, with a delivery date",96470
+3,and purchased Jan 2017 to Aug 2018: late analysis,96203
+4,and with a review: score analysis,95560
+5,and answered on or after delivery day,91325
+6,Late analysis: single-seller orders,94931
+7,"Late analysis: single-seller, with a distance",94460
+8,Late analysis: with valid stage dates,94819
+9,"Shipped, never delivered, in period (reported separately)",1097

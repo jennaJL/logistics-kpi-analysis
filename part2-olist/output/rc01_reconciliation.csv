@@ -1,0 +1,52 @@
+check_group,check_name,expected,actual,result
+rows,stg_orders = raw_orders,99441,99441,ok
+rows,stg_order_items = raw_order_items,112650,112650,ok
+rows,stg_payments = raw_payments,103886,103886,ok
+rows,stg_reviews = raw_reviews,99224,99224,ok
+rows,stg_customers = raw_customers,99441,99441,ok
+rows,stg_sellers = raw_sellers,3095,3095,ok
+rows,stg_products = raw_products,32951,32951,ok
+rows,stg_category_translation = raw + 2 added,73,73,ok
+rows,stg_geolocation = zips with a point inside Brazil,19010,19010,ok
+rows,fct_orders = one row per raw order,99441,99441,ok
+rows,dim_products = raw_products,32951,32951,ok
+rows,dim_sellers = raw_sellers,3095,3095,ok
+rows,dim_customers = distinct people,96096,96096,ok
+totals,item price: stg_order_items,13591643.7,13591643.7,ok
+totals,item price: fct_orders,13591643.7,13591643.7,ok
+totals,item price: dim_sellers,13591643.7,13591643.7,ok
+totals,item price: dim_products,13591643.7,13591643.7,ok
+totals,freight: fct_orders,2251909.54,2251909.54,ok
+totals,freight: dim_sellers,2251909.54,2251909.54,ok
+totals,order value: dim_customers,15843553.24,15843553.24,ok
+totals,payment value: fct_orders,16008872.12,16008872.12,ok
+totals,items: fct_orders,112650,112650,ok
+totals,items: dim_sellers,112650,112650,ok
+totals,items: dim_products,112650,112650,ok
+totals,payment rows: fct_orders,103886,103886,ok
+totals,review rows: fct_orders,99224,99224,ok
+totals,orders: dim_customers,99441,99441,ok
+totals,orders with a review: fct_orders,98673,98673,ok
+definitions,delivered orders with a date,96470,96470,ok
+definitions,late by calendar day,6534,6534,ok
+definitions,late by timestamp,7826,7826,ok
+definitions,"shipped, never delivered",1107,1107,ok
+definitions,orders with 2+ sellers,1278,1278,ok
+definitions,orders with 2+ reviews,547,547,ok
+definitions,kept review really is that order's review and score,98673,98673,ok
+definitions,kept review is the latest for its order,98673,98673,ok
+rules,days_late = actual_days - promised_days,0,0,ok
+rules,is_late agrees with days_late,0,0,ok
+rules,no delivery before purchase,0,0,ok
+rules,no negative stage times,0,0,ok
+rules,"late analysis: all delivered, in period, with measures",0,0,ok
+rules,score analysis: all have a score,0,0,ok
+rules,seller_id filled only on single-seller orders,0,0,ok
+rules,every late-analysis order has items and a category,0,0,ok
+rules,fct_orders.seller_id exists in dim_sellers,0,0,ok
+rules,fct_orders.customer_unique_id exists in dim_customers,0,0,ok
+rules,every item product exists in dim_products,0,0,ok
+rules,"distances are possible within Brazil (0 to 5,000 km)",0,0,ok
+rules,no untranslated category,0,0,ok
+rules,price is stored as a number,0,0,ok
+rules,review score is stored as a whole number from 1 to 5,0,0,ok
