@@ -1,0 +1,13 @@
+sample,outcome,controls,orders,late_orders,late_effect,ci95_low,ci95_high,p_value
+all reviews,score (1-5),none,95560,6378,-2.021,-2.06,-1.981,0.0e+00
+all reviews,score (1-5),full,95560,6378,-1.98,-2.02,-1.94,0.0e+00
+all reviews,bad review (share),none,95560,6378,0.532,0.52,0.544,0.0e+00
+all reviews,bad review (share),full,95560,6378,0.525,0.513,0.537,0.0e+00
+reviews after delivery,score (1-5),none,91325,2294,-0.878,-0.942,-0.814,5.7e-160
+reviews after delivery,score (1-5),full,91325,2294,-0.866,-0.93,-0.803,5.2e-158
+reviews after delivery,bad review (share),none,91325,2294,0.191,0.173,0.21,1.0e-90
+reviews after delivery,bad review (share),full,91325,2294,0.191,0.173,0.21,2.9e-92
+"after delivery, 1 seller and 1 item",score (1-5),none,82124,2083,-0.886,-0.951,-0.82,2.3e-154
+"after delivery, 1 seller and 1 item",score (1-5),full,82124,2083,-0.871,-0.936,-0.805,3.5e-149
+"after delivery, 1 seller and 1 item",bad review (share),none,82124,2083,0.191,0.172,0.21,8.9e-86
+"after delivery, 1 seller and 1 item",bad review (share),full,82124,2083,0.19,0.171,0.209,4.1e-85

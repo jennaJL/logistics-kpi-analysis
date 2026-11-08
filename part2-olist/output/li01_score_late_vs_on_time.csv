@@ -1,0 +1,7 @@
+review_timing,delivery,orders,avg_score,bad_review_pct,five_star_pct
+all reviews,late,6378,2.27,62.4,16.5
+all reviews,on time,89182,4.29,9.2,62.3
+before delivery,late,4084,1.63,81.6,5.9
+before delivery,on time,151,3.85,19.2,52.3
+on/after delivery,late,2294,3.41,28.3,35.5
+on/after delivery,on time,89031,4.29,9.2,62.3

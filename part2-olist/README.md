@@ -12,7 +12,7 @@ The raw files are not stored in this repo.
 
 ## Status
 
-The data is loaded and checked, and the clean tables are built. The analysis of late delivery comes next.
+The data is loaded and checked, the clean tables are built, and the first answer is in: late delivery clearly hurts review scores (see below).
 
 ## Data quality
 
@@ -67,15 +67,51 @@ In the late analysis, 6,531 orders are late (6.79%). 1,097 more in the same peri
 
 **One new finding for the analysis:** orders with more items or sellers score lower even when on time (4.36 with one seller and one item, 2.87 with 2+ sellers). Item and seller counts are now planned regression controls (issue 26 in the log).
 
+## Does late delivery hurt customers?
+
+Yes, and by a lot. Results come from `analyze_lateness.py`, which runs `sql/06_lateness_impact.sql` and the regressions. Population: the 95,560 orders in the score analysis. A **bad review** is 1 or 2 stars.
+
+| Reviews | Delivery | Orders | Avg. score | Bad reviews | 5 stars |
+|---|---|---|---|---|---|
+| All | On time | 89,182 | 4.29 | 9.2% | 62.3% |
+| All | Late | 6,378 | 2.27 | 62.4% | 16.5% |
+| Answered after delivery | On time | 89,031 | 4.29 | 9.2% | 62.3% |
+| Answered after delivery | Late | 2,294 | 3.41 | 28.3% | 35.5% |
+
+**The effect holds with controls.** In a regression with item count, seller count, order value, purchase month and customer state (robust standard errors), a late order scores **1.98 stars lower** on all reviews (95% CI 1.94 to 2.02). On reviews answered after delivery it is **0.87 stars lower** (0.80 to 0.93) and 19 percentage points more likely to be a bad review. Single-seller, single-item orders give the same result (0.87 stars), so issue 26 does not explain it. Results: `output/li05_regression.csv`.
+
+**Two numbers, because they measure different things.** All reviews include customers who wrote while still waiting (issue 1), so 1.98 is the full cost of lateness on the score. 0.87 is the cost among customers who already had the parcel, so it is the conservative figure.
+
+**It gets worse the later the parcel is** (`output/li02_score_by_days_late.csv`):
+
+| Days late | Orders | Avg. score | Bad reviews |
+|---|---|---|---|
+| 8+ days early | 70,673 | 4.32 | 9.0% |
+| 1–7 days early | 17,229 | 4.20 | 10.2% |
+| On the promised day | 1,280 | 4.03 | 12.4% |
+| 1–3 days late | 1,851 | 3.29 | 32.1% |
+| 4–7 days late | 1,748 | 2.10 | 67.7% |
+| 8–14 days late | 1,446 | 1.67 | 80.2% |
+| 15+ days late | 1,333 | 1.72 | 78.3% |
+
+Even 1–3 days late more than triples the bad-review rate of on-time orders (9.2%), so small delays matter.
+
+**Size of the problem:** late orders are 6.7% of reviewed orders but give 3,981 of the 12,228 bad reviews. If they scored like on-time orders, about **3,391 bad reviews (28% of all) would not exist** (`output/li03_bad_reviews_caused_by_lateness.csv`). Counting only the effect on reviews answered after delivery, it is still about 1,200 (10%).
+
+**Where to act first** (`output/li04_late_rate_and_impact_by_state.csv`): **Rio de Janeiro (RJ)** has the most excess bad reviews (905), because 12.0% of its orders are late, against 4.4% in São Paulo. São Paulo comes second (815) because of its volume. Bahia (11.9% late) and Ceará (13.7%) also have high late rates.
+
+**Limits:** this is observational data, so lateness is not randomly assigned. The controls and the steady rise with days late make a causal reading plausible, but other problems with the same orders (a damaged product, a poor seller) could add to the effect. The models are OLS and linear probability models, chosen so the effect reads in stars and percentage points.
+
 ## How to run
 
-Python 3 is all you need. The 9 CSVs go in a folder outside the repo.
+Python 3 is all you need, plus pandas and statsmodels for `analyze_lateness.py`. The 9 CSVs go in a folder outside the repo.
 
 ```bash
 cd part2-olist
 python3 load_data.py path/to/csv/folder    # creates data/olist.db (git-ignored)
 python3 run_checks.py                      # writes output/dq*.csv
 python3 build_tables.py                    # adds the clean tables, writes output/rc*.csv
+python3 analyze_lateness.py                # writes output/li*.csv (needs pandas, statsmodels)
 python3 measure_performance.py             # writes output/perf_*
 ```
 
@@ -85,12 +121,14 @@ python3 measure_performance.py             # writes output/perf_*
 load_data.py                   CSV -> SQLite, unchanged, all columns as text
 run_checks.py                  runs the checks and saves the results
 build_tables.py                builds the clean tables and checks them against raw
+analyze_lateness.py            measures how much late delivery hurts review scores
 measure_performance.py         times the queries with and without indexes
 sql/01_data_quality.sql        data-quality checks
 sql/02_performance_queries.sql the two queries that were timed
 sql/03_staging.sql             staging tables
 sql/04_analysis_tables.sql     order, seller, customer and product tables
 sql/05_reconciliation.sql      checks against the raw data
+sql/06_lateness_impact.sql     late vs on-time scores, days late, impact by state
 DATA_DICTIONARY.md             every table, column and metric definition
 ISSUES_LOG.md                  every problem found and how it is handled
 output/                        results of the checks and timings
