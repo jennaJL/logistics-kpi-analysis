@@ -1,0 +1,5 @@
+sample,metric,on_time_orders,late_orders,on_time,late,difference,ci95_low,ci95_high,resamples
+all reviews,avg score (late - on time),89182,6378,4.291,2.271,-2.021,-2.059,-1.982,10000
+all reviews,bad review share (late - on time),89182,6378,0.092,0.624,0.532,0.52,0.543,10000
+reviews after delivery,avg score (late - on time),89031,2294,4.292,3.414,-0.878,-0.941,-0.814,10000
+reviews after delivery,bad review share (late - on time),89031,2294,0.092,0.283,0.191,0.172,0.21,10000

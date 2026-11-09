@@ -92,3 +92,64 @@ SELECT customer_state,
        RANK() OVER (ORDER BY late_orders * (late_bad_rate - on_time_bad_rate) DESC) AS impact_rank
 FROM by_state
 ORDER BY impact_rank;
+
+-- name: li08_late_rate_by_seller
+-- Which sellers cause the most late orders? Single-seller orders only (seller_id is empty on
+-- multi-seller orders, issue 10). Sellers with 100+ orders in the late analysis, ranked by
+-- excess late orders = late orders - orders * overall late rate.
+WITH overall AS (
+    SELECT AVG(is_late) AS late_rate
+    FROM fct_orders
+    WHERE in_late_analysis = 1 AND seller_id IS NOT NULL
+),
+by_seller AS (
+    SELECT seller_id,
+           MAX(seller_state) AS seller_state,
+           COUNT(*) AS orders,
+           SUM(is_late) AS late_orders,
+           AVG(CASE WHEN is_late = 1 THEN days_late END) AS avg_days_late_when_late,
+           AVG(promised_days) AS avg_promised_days,
+           AVG(actual_days) AS avg_actual_days,
+           AVG(CASE WHEN in_score_analysis = 1 THEN review_score END) AS avg_score
+    FROM fct_orders
+    WHERE in_late_analysis = 1 AND seller_id IS NOT NULL
+    GROUP BY seller_id
+    HAVING COUNT(*) >= 100
+)
+SELECT SUBSTR(b.seller_id, 1, 8) AS seller,
+       b.seller_state,
+       b.orders,
+       b.late_orders,
+       ROUND(100.0 * b.late_orders / b.orders, 1) AS late_pct,
+       ROUND(b.late_orders - b.orders * o.late_rate) AS excess_late_orders,
+       ROUND(b.avg_days_late_when_late, 1) AS avg_days_late_when_late,
+       ROUND(b.avg_promised_days, 1) AS avg_promised_days,
+       ROUND(b.avg_actual_days, 1) AS avg_actual_days,
+       ROUND(b.avg_score, 2) AS avg_score,
+       RANK() OVER (ORDER BY b.late_orders - b.orders * o.late_rate DESC) AS problem_rank
+FROM by_seller b CROSS JOIN overall o
+ORDER BY problem_rank;
+
+-- name: li09_late_rate_by_promise
+-- Promise accuracy: how long was the promise, how long did delivery take, and how often was
+-- the promise broken? days_early = promised_days - actual_days (negative = late).
+WITH banded AS (
+    SELECT *,
+           CASE WHEN promised_days <= 14 THEN '1. up to 14 days'
+                WHEN promised_days <= 21 THEN '2. 15-21 days'
+                WHEN promised_days <= 28 THEN '3. 22-28 days'
+                WHEN promised_days <= 35 THEN '4. 29-35 days'
+                ELSE '5. 36+ days' END AS promise_band
+    FROM fct_orders
+    WHERE in_late_analysis = 1
+)
+SELECT promise_band,
+       COUNT(*) AS orders,
+       ROUND(AVG(promised_days), 1) AS avg_promised_days,
+       ROUND(AVG(actual_days), 1) AS avg_actual_days,
+       ROUND(AVG(promised_days - actual_days), 1) AS avg_days_early,
+       ROUND(100.0 * AVG(is_late), 1) AS late_pct,
+       ROUND(AVG(CASE WHEN in_score_analysis = 1 THEN review_score END), 2) AS avg_score
+FROM banded
+GROUP BY promise_band
+ORDER BY promise_band;

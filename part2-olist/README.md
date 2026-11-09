@@ -12,7 +12,7 @@ The raw files are not stored in this repo.
 
 ## Status
 
-The data is loaded and checked, the clean tables are built, and the first answer is in: late delivery clearly hurts review scores (see below).
+The data is loaded and checked, the clean tables are built, and the lateness analysis is done: late delivery clearly hurts review scores, with bootstrap intervals and controls (see below). The Tableau dashboard comes next.
 
 ## Data quality
 
@@ -69,7 +69,7 @@ In the late analysis, 6,531 orders are late (6.79%). 1,097 more in the same peri
 
 ## Does late delivery hurt customers?
 
-Yes, and by a lot. Results come from `analyze_lateness.py`, which runs `sql/06_lateness_impact.sql` and the regressions. Population: the 95,560 orders in the score analysis. A **bad review** is 1 or 2 stars.
+Yes, and by a lot. Results come from `analyze_lateness.py`, which runs `sql/06_lateness_impact.sql`, the bootstrap and the regressions. Population: the 95,560 orders in the score analysis. A **bad review** is 1 or 2 stars.
 
 | Reviews | Delivery | Orders | Avg. score | Bad reviews | 5 stars |
 |---|---|---|---|---|---|
@@ -100,7 +100,26 @@ Even 1–3 days late more than triples the bad-review rate of on-time orders (9.
 
 **Where to act first** (`output/li04_late_rate_and_impact_by_state.csv`): **Rio de Janeiro (RJ)** has the most excess bad reviews (905), because 12.0% of its orders are late, against 4.4% in São Paulo. São Paulo comes second (815) because of its volume. Bahia (11.9% late) and Ceará (13.7%) also have high late rates.
 
-**Limits:** this is observational data, so lateness is not randomly assigned. The controls and the steady rise with days late make a causal reading plausible, but other problems with the same orders (a damaged product, a poor seller) could add to the effect. The models are OLS and linear probability models, chosen so the effect reads in stars and percentage points.
+**The gap is not a sampling accident** (`output/li06_bootstrap.csv`). With 10,000 bootstrap resamples of orders, the 95% interval for the score gap is −2.06 to −1.98 stars on all reviews and −0.94 to −0.81 on reviews answered after delivery. The bad-review gap is +52 to +54 points and +17 to +21 points. A score takes only five values, so each resample draws the star counts from a multinomial, which is the same as resampling orders and much faster.
+
+**Price, freight, distance and category do not explain it** (`output/li07_regression_controls.csv`). These controls need the seller's location, so this model uses the 93,832 single-seller orders with a known distance. Lateness is related to distance: 4.5% of orders under 184 km are late, against 8.9% over 800 km. But adding the controls barely moves the effect:
+
+| Reviews | Controls | Effect on score | 95% CI | Effect on bad reviews |
+|---|---|---|---|---|
+| All | None | −2.04 | −2.08 to −2.00 | +53.7 pts |
+| All | Price, freight, distance | −2.02 | −2.06 to −1.98 | +53.4 pts |
+| All | + category, items, month, state | −1.98 | −2.02 to −1.94 | +52.5 pts |
+| After delivery | None | −0.89 | −0.96 to −0.83 | +19.5 pts |
+| After delivery | Price, freight, distance | −0.88 | −0.95 to −0.82 | +19.3 pts |
+| After delivery | + category, items, month, state | −0.86 | −0.93 to −0.80 | +19.1 pts |
+
+Categories with fewer than 300 orders are pooled as "other". Price, freight and distance are log-transformed.
+
+**Sellers differ more than chance allows** (`output/li08_late_rate_by_seller.csv`). Among the 201 sellers with 100+ single-seller orders, late rates run from 0% to 19.1% (median 5.8%). The spread is about 4.5 times what random variation would give (chi-square 912 on 200 degrees of freedom). The problem is still spread out: the 10 worst sellers account for 312 late orders above the average rate, about 5% of all 6,531 late orders. So seller follow-up helps, but it will not fix lateness alone. Two sellers stand out on rate rather than volume: `06a2c3af` (MA, 19.1% late) and `88460e8e` (PR, 18.5% late, average score 3.51). 17 of the 20 worst sellers are in São Paulo, which mostly reflects where sellers are.
+
+**Promises are long, and length is not accuracy** (`output/li09_late_rate_by_promise.csv`). On average a parcel arrives 11 days before the promised date. The longest promises (36+ days) are broken least often (3.6% late) but still arrive 24 days early, and their average score is the lowest (4.06 against 4.32 for promises up to 14 days). Long promises are also long-distance orders, so this table does not show that shorter promises would raise scores. It does show that the promise is a poor estimate of the actual delivery time, which is the point to test next.
+
+**Limits:** this is observational data, so lateness is not randomly assigned. The bootstrap shows the gap is not noise, and the controls show it is not explained by price, freight, distance, category, basket size, month or state. The steady rise with days late also fits a causal reading. Still, unmeasured problems with the same orders (a damaged product, a poor seller, a lost parcel) could add to the effect, so the numbers are associations, not proven causes. The models are OLS and linear probability models, chosen so the effect reads in stars and percentage points. Seller and distance results use single-seller orders only (issue 10).
 
 ## How to run
 
@@ -128,7 +147,7 @@ sql/02_performance_queries.sql the two queries that were timed
 sql/03_staging.sql             staging tables
 sql/04_analysis_tables.sql     order, seller, customer and product tables
 sql/05_reconciliation.sql      checks against the raw data
-sql/06_lateness_impact.sql     late vs on-time scores, days late, impact by state
+sql/06_lateness_impact.sql     late vs on-time scores, days late, impact by state, sellers, promises
 DATA_DICTIONARY.md             every table, column and metric definition
 ISSUES_LOG.md                  every problem found and how it is handled
 output/                        results of the checks and timings

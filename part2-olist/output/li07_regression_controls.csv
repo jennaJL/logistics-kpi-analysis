@@ -1,0 +1,13 @@
+sample,outcome,controls,orders,late_orders,late_effect,ci95_low,ci95_high,p_value
+all reviews,score (1-5),none,93832,6321,-2.042,-2.081,-2.002,0.0e+00
+all reviews,score (1-5),"price, freight, distance",93832,6321,-2.023,-2.063,-1.984,0.0e+00
+all reviews,score (1-5),full,93832,6321,-1.981,-2.021,-1.941,0.0e+00
+all reviews,bad review (share),none,93832,6321,0.537,0.525,0.549,0.0e+00
+all reviews,bad review (share),"price, freight, distance",93832,6321,0.534,0.521,0.546,0.0e+00
+all reviews,bad review (share),full,93832,6321,0.525,0.513,0.538,0.0e+00
+reviews after delivery,score (1-5),none,89637,2273,-0.892,-0.956,-0.828,4.4e-164
+reviews after delivery,score (1-5),"price, freight, distance",89637,2273,-0.883,-0.947,-0.819,1.9e-161
+reviews after delivery,score (1-5),full,89637,2273,-0.863,-0.927,-0.8,3.1e-155
+reviews after delivery,bad review (share),none,89637,2273,0.195,0.176,0.213,1.6e-93
+reviews after delivery,bad review (share),"price, freight, distance",89637,2273,0.193,0.174,0.211,4.3e-92
+reviews after delivery,bad review (share),full,89637,2273,0.191,0.172,0.209,9.6e-91
